@@ -1,0 +1,11 @@
+title: FieldViolationsError
+description: Field Violations Error Definition
+type: object
+allOf:
+  - $ref: 'api-error.yml'
+properties:
+  fieldErrors :
+    readonly: true
+    type: array
+    items:
+      $ref: 'field-error.yml'

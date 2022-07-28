@@ -1,0 +1,36 @@
+title: Reservation
+description: Reservations
+type: object
+allOf:
+  - $ref: './common/base.yml'
+  - type: object
+    title: ReservationFields
+    properties:
+      title:
+        type: string
+        description: Name of the reservation
+        minLength: 1
+        maxLength: 1024
+      startTime:
+        type: string
+        format: date-time
+        description: Starting Timestamp
+      endTime:
+        type: string
+        format: date-time
+        description: Ending Timestamp
+      email:
+        type: string
+        pattern: '^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$'
+        description: Email Address
+      version:
+        type: integer
+        description: The saved version of this object
+      availabilityId:
+        type: string
+        description: Opaque, random unique id for an object in the system
+    required:
+      - title
+      - start_time
+      - end_time
+      - email

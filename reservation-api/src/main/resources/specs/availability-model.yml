@@ -1,0 +1,29 @@
+title: Availability
+description: Availabilities
+type: object
+allOf:
+  - $ref: './common/base.yml'
+  - type: object
+    title: AvailabilityFields
+    properties:
+      startTime:
+        type: string
+        format: date-time
+        description: Starting Timestamp
+      endTime:
+        type: string
+        format: date-time
+        description: Ending Timestamp
+      email:
+        type: string
+        pattern: '^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$'
+        description: Email Address
+      version:
+        type: integer
+        description: The saved version of this object
+      booked:
+        type: boolean
+        description: if the availability is booked
+    required:
+      - end_time
+      - start_time

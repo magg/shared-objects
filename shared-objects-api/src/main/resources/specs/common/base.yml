@@ -1,0 +1,17 @@
+description: Base Fields used on all common objects
+type: object
+properties:
+  id:
+    readOnly: true
+    type: string
+    description: Opaque, random unique id for an object in the system
+  createdAt:
+    readOnly: true
+    type: string
+    format: date-time
+    description: Created Timestamp
+  updatedAt:
+    readOnly: true
+    type: string
+    format: date-time
+    description: Last Update Timestamp

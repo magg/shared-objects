@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>shared-objects-parent</artifactId>
+    <groupId>com.magg</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>reservation-api</artifactId>
+  <packaging>jar</packaging>
+
+  <name>Reservation API</name>
+  <description>API for Platform Cases</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-ui</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.openapitools</groupId>
+      <artifactId>jackson-databind-nullable</artifactId>
+    </dependency>
+    <!-- Bean Validation API support -->
+    <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+    </dependency>
+
+    <!-- Utilities> -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+
+    <!-- Nextiva -->
+    <dependency>
+      <groupId>com.magg</groupId>
+      <artifactId>shared-objects-api</artifactId>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.build.outputDirectory}/specs/reservation-service.yml</inputSpec>
+              <generatorName>spring</generatorName>
+              <library>spring-boot</library>
+              <configurationFile>${project.basedir}/src/main/resources/options.json</configurationFile>
+              <verbose>false</verbose>
+              <generateSupportingFiles>true</generateSupportingFiles>
+              <importMappings>
+                <importMapping>BasePage=com.magg.reservation.api.model.BasePage</importMapping>
+              </importMappings>
+              <environmentVariables>
+                <supportingFiles>
+                  <supportingFile>ApiUtil.java</supportingFile>
+                </supportingFiles>
+              </environmentVariables>
+              <configOptions>
+                <basePackage>com.magg.reservation.api</basePackage>
+                <modelPackage>com.magg.reservation.api.model</modelPackage>
+                <apiPackage>om.magg.reservation.api</apiPackage>
+                <configPackage>com.magg.reservation.api.config</configPackage>
+
+                <interfaceOnly>true</interfaceOnly>
+                <serializableModel>true</serializableModel>
+                <useTags>true</useTags>
+                <dateLibrary>java8</dateLibrary>
+              </configOptions>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-remote-resources-plugin</artifactId>
+        <version>${maven-remote-resources-plugin.version}</version>
+        <configuration>
+          <resourceBundles>
+            <resourceBundle>com.magg:shared-objects-api:${project.version}</resourceBundle>
+          </resourceBundles>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>process</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-remote-resources-plugin</artifactId>
+        <version>${maven-remote-resources-plugin.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>bundle</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <includes>
+            <include>**/specs/*.yml</include>
+          </includes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

@@ -1,0 +1,11 @@
+title: ApiError
+description: ApiError Definition
+type: object
+properties:
+  code:
+    description: an API, type specific error code
+    readonly: true
+    type: string
+  message:
+    readonly: true
+    type: string

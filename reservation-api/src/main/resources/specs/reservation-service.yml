@@ -1,0 +1,506 @@
+openapi: 3.0.2
+info:
+  title: Reservation Service
+  version: "1.0"
+  description: Manage your Reservation with this API
+servers:
+  - url: "http://localhost:8080"
+paths:
+
+  /api/v1/availabilities:
+    get:
+      parameters:
+        - name: ids
+          in: query
+          description: Filter by ids
+          schema:
+            type: array
+            items:
+              type: string
+        - name: userIds
+          in: query
+          description: Filter by userIds
+          schema:
+            type: array
+            items:
+              type: string
+        - name: pageSize
+          in: query
+          description: Requested page size, maximum size is 200
+          required: false
+          schema:
+            type: integer
+            default: 25
+            maximum: 200
+        - name: pageNumber
+          in: query
+          description: Requested page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: sortField
+          in: query
+          description: the field to sort by
+          required: false
+          schema:
+            type: string
+            default: "startTime"
+            minLength: 1
+            maxLength: 1024
+        - name: sortDirection
+          in: query
+          required: false
+          schema:
+            type: string
+            default: "ASC"
+            enum:
+              - ASC
+              - DESC
+      description: List of Availabilities
+      responses:
+        "200":
+          description: Availabilities
+          headers:
+            "X-Total-Count":
+              description: The total possible number of records
+              schema:
+                type: integer
+            "Link":
+              description: Links to first next previous last if applicatable
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: uri
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AvailabilityPage"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    post:
+      description: Create a new Availability
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AvailabilityModel"
+      responses:
+        "201":
+          description: Created
+          headers:
+            location:
+              schema:
+                type: string
+                description: Location of the created Availability
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AvailabilityModel"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FieldViolationsError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/UnAuthorizedResponse"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ForbiddenResponse"
+
+  /api/v1/availabilities/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: Availability ID
+        required: true
+        schema:
+          type: string
+    get:
+      description: Get Availability Record
+      responses:
+        "200":
+          description: Availability
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AvailabilityModel"
+        "404":
+          description: Reservation Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    patch:
+      description: Update an existing Availability
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: "object"
+      responses:
+        "200":
+          description: Ok
+          headers:
+            location:
+              schema:
+                type: string
+                description: Location of the created Availability
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AvailabilityModel"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FieldViolationsError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/UnAuthorizedResponse"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ForbiddenResponse"
+    delete:
+      description: Delete Availability
+      responses:
+        "204":
+          description: Deleted Availability
+        "404":
+          description: Availability Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /api/v1/reservations:
+    get:
+      parameters:
+        - name: ids
+          in: query
+          description: Filter by ids
+          schema:
+            type: array
+            items:
+              type: string
+        - name: userIds
+          in: query
+          description: Filter by userIds
+          schema:
+            type: array
+            items:
+              type: string
+        - name: email
+          in: query
+          description: Filter by email
+          schema:
+            type: array
+            items:
+              type: string
+        - name: pageSize
+          in: query
+          description: Requested page size, maximum size is 200
+          required: false
+          schema:
+            type: integer
+            default: 25
+            maximum: 200
+        - name: pageNumber
+          in: query
+          description: Requested page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: sortField
+          in: query
+          description: the field to sort by
+          required: false
+          schema:
+            type: string
+            default: "startTime"
+            minLength: 1
+            maxLength: 1024
+        - name: sortDirection
+          in: query
+          required: false
+          schema:
+            type: string
+            default: "ASC"
+            enum:
+              - ASC
+              - DESC
+      description: List of Reservations
+      responses:
+        "200":
+          description: Reservations
+          headers:
+            "X-Total-Count":
+              description: The total possible number of records
+              schema:
+                type: integer
+            "Link":
+              description: Links to first next previous last if applicatable
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: uri
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationPage"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    post:
+      description: Create a new Reservation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReservationModel"
+      responses:
+        "201":
+          description: Created
+          headers:
+            location:
+              schema:
+                type: string
+                description: Location of the created Reservation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationModel"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FieldViolationsError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/UnAuthorizedResponse"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ForbiddenResponse"
+
+  /api/v1/reservations/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: Reservation ID
+        required: true
+        schema:
+          type: string
+    get:
+      description: Get Reservation Record
+      responses:
+        "200":
+          description: Reservation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationModel"
+        "404":
+          description: Reservation Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    patch:
+      description: Update an existing Reservation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: "object"
+      responses:
+        "200":
+          description: Ok
+          headers:
+            location:
+              schema:
+                type: string
+                description: Location of the created Reservation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationModel"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FieldViolationsError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/UnAuthorizedResponse"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ForbiddenResponse"
+    delete:
+      description: Delete Reservation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Email"
+      responses:
+        "204":
+          description: Deleted Reservation
+        "404":
+          description: Reservation Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /api/v1/users:
+    post:
+      description: Create a new User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserModel"
+      responses:
+        "201":
+          description: Created
+          headers:
+            location:
+              schema:
+                type: string
+                description: Location of the created User
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserModel"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FieldViolationsError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/UnAuthorizedResponse"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ForbiddenResponse"
+
+  /api/v1/users/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: string
+    get:
+      description: Get User Record
+      responses:
+        "200":
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserModel"
+        "404":
+          description: User Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+
+components:
+  schemas:
+    BasePage:
+      $ref: './common/base-page.yml'
+    Email:
+      $ref: 'email.yml'
+    UserModel:
+      $ref: 'user-model.yml'
+    ReservationModel:
+      $ref: 'reservation-model.yml'
+    ReservationPage:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BasePage'
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReservationModel'
+    AvailabilityModel:
+      $ref: 'availability-model.yml'
+    AvailabilityPage:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BasePage'
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AvailabilityModel'
+    ApiError:
+      $ref: './common/api-error.yml'
+    FieldError:
+        $ref: './common/field-error.yml'
+    FieldViolationsError:
+        $ref: './common/field-violations-error.yml'
+    UnAuthorizedResponse:
+      type: object
+    ForbiddenResponse:
+      type: object

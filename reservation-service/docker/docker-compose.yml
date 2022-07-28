@@ -1,0 +1,12 @@
+# Easy way to set up a local environment for testing.
+version: '2'
+services:
+  database:
+    image: "postgres:11.9"
+    container_name: as-db
+    environment:
+      - POSTGRES_DB=example
+      - POSTGRES_USER=backend-service
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"

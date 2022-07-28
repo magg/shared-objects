@@ -1,0 +1,10 @@
+title: FieldError
+description: FieldError Definition
+type: object
+properties:
+  fieldName:
+    readonly: true
+    type: string
+  message:
+    readonly: true
+    type: string

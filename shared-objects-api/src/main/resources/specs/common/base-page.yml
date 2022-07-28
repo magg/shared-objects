@@ -1,0 +1,30 @@
+description: Page resource object for paged REST resource response. Extend this object to return a strongly-typed payload.
+type: object
+properties:
+  totalCount:
+    description: The total number of resources at the requested location taking query parameters into account
+    readOnly: true
+    type: integer
+    format: int64
+  first:
+    description: Link to the first page in the resource collection
+    readOnly: true
+    type: string
+    format: uri
+  prev:
+    description: Link to the first page in the resource collection
+    readOnly: true
+    type: string
+    format: uri
+  next:
+    description: Link to the first page in the resource collection
+    readOnly: true
+    type: string
+    format: uri
+  last:
+    description: Link to the first page in the resource collection
+    readOnly: true
+    type: string
+    format: uri
+required:
+  - totalCount
