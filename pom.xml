@@ -9,6 +9,7 @@
   </parent>
 
   <artifactId>shared-objects-parent</artifactId>
+  <groupId>com.magg</groupId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>shared-objects</name>
